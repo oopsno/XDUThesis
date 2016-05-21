@@ -1,0 +1,3 @@
+[submodule "gbt7715"]
+	path = XDUThesis/3rdparty/gbt7714
+	url = https://github.com/Haixing-Hu/GBT7714-2005-BibTeX-Style.git
