@@ -2,12 +2,8 @@
 
 % LaTeX3
 \RequirePackage{expl3}
-\RequirePackage{switch}
-\RequirePackage{cover}
-\RequirePackage{autoterm}
 \RequirePackage{fancyhdr}
-\input{yabasky.cfg}
-\ProvidesExplClass{yabasky}{2016/05/21}{0.1.0}{YaBAskY Document Class}
+\ProvidesExplClass{bachelor}{2016/05/21}{0.1.0}{XDUThesis/bachelor}
 
 % CTeX v2.3
 \LoadClass[
@@ -85,38 +81,10 @@
 
 \pagestyle { YaBAskY::PageStyle }
 
-% 定义开关
-\switch_group_new:nn { compile }           { 编译选项 }
-\switch_new:nnn      { compile } { debug } { 调试模式 }
-\switch_new:nnn      { compile } { SHTF  } { 盲审模式 }
-
 % 标题设置
-\NewDocumentCommand \SetCompileOptions { m }
-  { \switch_group_set:nn { compile } { #1 } }
 
-\NewDocumentCommand \SetCoverItems { m }
+\NewDocumentCommand \SetCoverInfo { m }
   { \cover_set:n { #1 } }
 
 \RenewDocumentCommand \maketitle { }
   { \cover_make: }
-
-% 术语定义
-\NewDocumentCommand \SetTerm { mmm }
-  {
-    \new_term:nnn { #1 } { #2 } { #3 }
-  }
-
-% 打印调试信息
-\NewDocumentCommand \MakeDebugPage { }
-  {
-    \switch_if:nnTF { compile } { debug }
-      {
-        \msg_term:n { 正在以调试模式编译 }
-        \chapter { 调试信息 }
-        \switch_debuginfo:
-        \cover_debuginfo:
-      }
-      {
-        \msg_term:n { 正在以发布模式编译 }
-      }
-  }
