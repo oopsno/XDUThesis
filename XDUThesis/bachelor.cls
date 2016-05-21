@@ -101,45 +101,37 @@
     \switch_group_set:nn { compile } { #1 }
   }
 
-\DeclareOption { cover }
+% 导出用于标题信息设置宏
+\NewDocumentCommand   \SetCoverItems { m }
   {
-    % 导出用于标题信息设置宏
-    \NewDocumentCommand   \SetCoverItems { m }
-      {
-        \cover_set:n { #1 }
-      }
-    % 重定义maketitle
-    \RenewDocumentCommand \maketitle { m }
-      {
-        \cover_make:
-      }
+    \cover_set:n { #1 }
+  }
+% 重定义maketitle
+\RenewDocumentCommand \maketitle { m }
+  {
+    \cover_make:
   }
 
-\DeclareOption { term }
+% SetTerm宏设置一个术语缩写, 例如使用
+% \SetTerm{Abbr}{Abbreviation}{缩写}
+% 将第定义宏\Abbr
+% 首次引用时展开成 缩写(Abbreviation, Abbr)
+% 其后引用时展开成 Abbr
+\NewDocumentCommand \SetTerm { mmm }
   {
-    % 导出设置自动术语表的宏
-    \NewDocumentCommand \SetTerm { mmm }
-      {
-        \term_new:nnn { #1 } { #2 } { #3 }
-      }
+    \term_new:nnn { #1 } { #2 } { #3 }
   }
 
-\DeclareOption { debug }
+% DebugChapter宏在调用位置插入章节 ``调试信息''
+\NewDocumentCommand \DebugChapter { }
   {
-    % 导出调试选项
-    \NewDocumentCommand \DebugChapter { }
+    \switch_if:nnTF { compile } { debug }
       {
-        \switch_if:nnTF { compile } { debug }
-          {
-            \msg_term:n { 正在以调试模式编译 }
-            \chapter { 调试信息 }
-            \switch_debuginfo:
-            \cover_debuginfo:
-          }
-          {
-          }
+        \msg_term:n { 正在以调试模式编译 }
+        \chapter { 调试信息 }
+        \switch_debuginfo:
+        \cover_debuginfo:
+      }
+      {
       }
   }
-
-\ProcessOptions
-
