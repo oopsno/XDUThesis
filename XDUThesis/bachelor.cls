@@ -66,25 +66,24 @@
 % 西文字体默认使用Times
 \fontfamily { ptm }
 
-\fancypagestyle { YaBAskY::PageStyle } {
+% 定义页面样式
+\fancypagestyle { XDUThesis::Bachelor::PageStyle } {
+  % 清空页眉页脚
   \fancyhead { }
   \fancyfoot { }
   % 左(偶数)页面为论文题目
   \fancyhead [ CE ] { \textnormal { \songti\zihao{5}\thesis_info:n { title } } }
-  % 页眉底划线的宽度为0.75磅
-  \renewcommand{\headrulewidth}{0.75pt}
   % 右(奇数)页面为章次和章的标题
   \fancyhead [ CO ] { \textnormal { \songti\zihao{5}\leftmark } }
-  % 页码宋体小五号 排在页眉最外侧 不加任何修饰
+  % 页码宋体小五号, 排在页眉最外侧, 不加任何修饰
   \fancyhead [ LE, RO ] { \songti\zihao{-5}\thepage }
+  % 页眉底划线的宽度为0.75磅
+  \renewcommand{\headrulewidth}{0.75pt}
 }
 
-\pagestyle { YaBAskY::PageStyle }
+% 并将上述样式置为默认值
+\pagestyle { XDUThesis::Bachelor::PageStyle }
 
-% 标题设置
-
+% 导出用于标题信息设置宏
 \NewDocumentCommand \SetCoverInfo { m }
   { \cover_set:n { #1 } }
-
-\RenewDocumentCommand \maketitle { }
-  { \cover_make: }
