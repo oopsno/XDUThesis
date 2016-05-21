@@ -3,6 +3,9 @@
 % LaTeX3
 \RequirePackage{expl3}
 \RequirePackage{fancyhdr}
+\RequirePackage{XDUThesis/common/switch}
+\RequirePackage{XDUThesis/common/term}
+\RequirePackage{XDUThesis/bachelor/cover}
 \ProvidesExplClass{bachelor}{2016/05/21}{0.1.0}{XDUThesis/bachelor}
 
 % CTeX v2.3
@@ -35,7 +38,7 @@
   {
     chapter =
       {
-        pagestyle  = YaBAskY::PageStyle,
+        pagestyle  = XDUThesis::Bachelor::PageStyle,
         beforeskip = 1.2em,
         afterskip  = 1.2em,
         format = \centering\heiti\zihao{3}\bf,
@@ -84,6 +87,59 @@
 % 并将上述样式置为默认值
 \pagestyle { XDUThesis::Bachelor::PageStyle }
 
-% 导出用于标题信息设置宏
-\NewDocumentCommand \SetCoverInfo { m }
-  { \cover_set:n { #1 } }
+% 设置参考文献样式为GB/T 7714-2005
+\bibliographystyle { XDUThesis/3rdparty/gbt7714/gbt7714-2005 }
+
+% 定义开关
+\switch_group_new:nn { compile }           { 编译选项 }
+\switch_new:nnn      { compile } { debug } { 调试模式 }
+\switch_new:nnn      { compile } { SHTF  } { 盲审模式 }
+
+% 标题设置
+\NewDocumentCommand \SetCompileOptions { m }
+  {
+    \switch_group_set:nn { compile } { #1 }
+  }
+
+\DeclareOption { cover }
+  {
+    % 导出用于标题信息设置宏
+    \NewDocumentCommand   \SetCoverItems { m }
+      {
+        \cover_set:n { #1 }
+      }
+    % 重定义maketitle
+    \RenewDocumentCommand \maketitle { m }
+      {
+        \cover_make:
+      }
+  }
+
+\DeclareOption { term }
+  {
+    % 导出设置自动术语表的宏
+    \NewDocumentCommand \SetTerm { mmm }
+      {
+        \term_new:nnn { #1 } { #2 } { #3 }
+      }
+  }
+
+\DeclareOption { debug }
+  {
+    % 导出调试选项
+    \NewDocumentCommand \DebugChapter { }
+      {
+        \switch_if:nnTF { compile } { debug }
+          {
+            \msg_term:n { 正在以调试模式编译 }
+            \chapter { 调试信息 }
+            \switch_debuginfo:
+            \cover_debuginfo:
+          }
+          {
+          }
+      }
+  }
+
+\ProcessOptions
+

@@ -1,0 +1,94 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% LaTeX3
+\RequirePackage{expl3}
+\ProvidesExplPackage{switch}{2016/05/21}{0.1.0}{开关选项支持}
+
+% 开关选项组 属性列表 { label: name }
+\prop_new:c { g_prop_switch_groups }
+
+% 定义开关选项组 \switch_group_new:nn { label }
+\cs_new:Npn \switch_group_new:nn #1#2
+  {
+    \prop_put:cnn { g_prop_switch_groups   } { #1 } { #2 }
+    \prop_new:c   { g_prop_switch_#1_name  }
+    \prop_new:c   { g_prop_switch_#1_value }
+  }
+
+% 设定开关组 \switch_group_set:nn { label } { kv-list }
+\cs_new:Npn \switch_group_set:nn #1#2
+  {
+    \keys_set:nn { #1 } { #2 }
+  }
+
+% 定义开关选项 \switch_new:nnn { group } { label } { name }
+\cs_new:Npn \switch_new:nnn #1#2#3
+  {
+    \prop_put:cnn { g_prop_switch_#1_name } { #2 } { #3 }
+    \keys_define:nn { #1 }
+      {
+        #2 .choice: ,
+        #2 .default:n = { true },
+        #2 / true .code:n =
+          {
+            \prop_put:cnn { g_prop_switch_#1_value } { #2 } { \BooleanTrue }
+          },
+        #2 / false .code:n =
+          {
+            \prop_put:cnn { g_prop_switch_#1_value } { #2 } { \BooleanFalse }
+          }
+      }
+  }
+
+% 获取开关选项名称
+\cs_new:Npn \switch_name:nn #1#2
+  {
+    \group_begin:
+    \prop_get:cnN { g_prop_switch_#1_name } { #2 } { \lg }
+    \lg
+    \group_end:
+  }
+
+% 获取开关状态
+\cs_new:Npn \swith_status:nn #1#2
+  {
+    \group_begin:
+    \prop_get:cnN { g_prop_switch_#1_value } { #2 } { \ls }
+    \group_end:
+  }
+
+% 条件分支
+\cs_new:Npn \switch_if:nnTF #1#2#3#4
+  {
+    \group_begin:
+    \prop_get:cnN { g_prop_switch_#1_value } { #2 } { \lg }
+    \bool_if:nTF  { \lg } { #3 } { #4 }
+    \group_end:
+  }
+
+% Boolean -> CHS
+\cs_new:Npn \switch_chs:nn #1#2
+  {
+    \switch_if:nnTF { #1 } { #2 } { 开 } { 关 }
+  }
+
+% 打印开关选项组 \switch_debuginfo:n { group }
+\cs_new:Npn \switch_debuginfo:n #1
+  {
+    \begin{itemize}
+    \prop_map_inline:cn { g_prop_switch_#1_name }
+      {
+        \item { $\frac{\makebox{##2}}{##1}${\quad}-{\quad}\switch_chs:nn { #1 } { ##1 } }
+      }
+    \end{itemize}
+  }
+
+% 打印所有开关组
+\cs_new:Nn \switch_debuginfo:
+  {
+    \prop_map_inline:Nn { \g_prop_switch_groups }
+      {
+        \section { ##2 }
+        \switch_debuginfo:n { ##1 }
+      }
+  }

@@ -1,0 +1,40 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\RequirePackage{expl3}
+\ProvidesExplPackage{autoterm}{2016/05/21}{0.1.0}{术语支持}
+
+\prop_new:c { g_autoterm_fullname_cn }
+\prop_new:c { g_autoterm_fullname_en }
+
+\cs_new:Npn \term_new:nnn #1#2#3
+  {
+    \prop_if_in:cnTF { g_autoterm_fullname_cn } { #1 }
+      {
+        \msg_term:n { [AutoTerms]\ 已重置术语\ #3(#2,\ #1) }
+        \setcounter { term_counter_#1 } { 0 }
+      }
+      {
+        \newcounter { term_counter_#1 }
+        \expandafter\NewDocumentCommand
+          \csname #1 \endcsname
+          { }
+          { \term_ref:n { #1 } }
+      }
+    \prop_put:cnn { g_autoterm_fullname_en } { #1 } { #2 }
+    \prop_put:cnn { g_autoterm_fullname_cn } { #1 } { #3 }
+  }
+
+\cs_new:Npn \term_ref:n #1
+  {
+    \prop_get:cnN { g_autoterm_fullname_cn } { #1 } \l_name_cn
+    \prop_get:cnN { g_autoterm_fullname_en } { #1 } \l_name_en
+    \int_compare:nTF { \arabic{ term_counter_#1 } > 0 }
+      { % 已被引用
+        { #1 }
+      }
+      {
+        \l_name_cn(\l_name_en, { #1 })
+      }
+    \stepcounter{ term_counter_#1 }
+  }
+
