@@ -13,8 +13,7 @@
   a4paper,
   hyperref,
   zihao      = -4,    % 默认小四号字体
-  linespread = 1.5,   % 近似1.5倍行距
-  fontset    = adobe  % 默认Adobe字体集
+  linespread = 1.5    % 近似1.5倍行距
 ]{ctexbook}[2016/02/02]
 
 % 纸张设置
