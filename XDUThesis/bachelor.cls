@@ -90,6 +90,12 @@
 % 设置参考文献样式为GB/T 7714-2005
 \bibliographystyle { XDUThesis/3rdparty/gbt7714/gbt7714-2005 }
 
+\let \l__original_cite \cite
+\RenewDocumentCommand \cite { m }
+{
+  $^\textnormal { \l__original_cite { #1 } }$
+}
+
 % 定义开关
 \switch_group_new:nn { compile }           { 编译选项 }
 \switch_new:nnn      { compile } { debug } { 调试模式 }
