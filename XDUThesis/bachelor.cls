@@ -6,7 +6,7 @@
 \RequirePackage{XDUThesis/common/switch}
 \RequirePackage{XDUThesis/common/term}
 \RequirePackage{XDUThesis/bachelor/cover}
-\ProvidesExplClass{bachelor}{2016/05/21}{0.1.0}{XDUThesis/bachelor}
+\ProvidesExplClass{XDUThesis/bachelor}{2016/05/21}{0.1.0}{XDUThesis/bachelor}
 
 % CTeX v2.3
 \LoadClass[
