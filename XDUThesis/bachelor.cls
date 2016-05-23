@@ -5,8 +5,14 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{XDUThesis/common/switch}
 \RequirePackage{XDUThesis/common/term}
+\RequirePackage{XDUThesis/common/section}
+\RequirePackage{XDUThesis/bachelor/suger}
 \RequirePackage{XDUThesis/bachelor/cover}
-\ProvidesExplClass{XDUThesis/bachelor}{2016/05/21}{0.1.0}{XDUThesis/bachelor}
+\ProvidesExplClass{XDUThesis/bachelor}{2016/05/22}{0.2.0}{西安电子科技大学本科毕业设计(论文)模板}
+
+%%%%%%%%%%%%%%%%%%%%
+% 基本格式配置
+%%%%%%%%%%%%%%%%%%%%
 
 % CTeX v2.3
 \LoadClass[
@@ -94,6 +100,10 @@
 {
   $^\textnormal { \l__original_cite { #1 } }$
 }
+
+%%%%%%%%%%%%%%%%%%%%
+% 导出文档命令
+%%%%%%%%%%%%%%%%%%%%
 
 % 定义开关
 \switch_group_new:nn { compile }           { 编译选项 }

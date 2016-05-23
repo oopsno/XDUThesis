@@ -1,0 +1,25 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% LaTeX3
+\RequirePackage{expl3}
+\ProvidesExplPackage{XDUThesis/bachelor/suger}{2016/05/22}{0.1.0}{糖}
+
+\newenvironment { fig } [2] {
+  \begin{figure}[h]
+    \def\l_fig_label{#1}
+    \def\l_fig_caption{#2}
+    \centering
+}{
+    \label{\l_fig_label}
+    \caption{\l_fig_caption}
+  \end{figure}
+}
+
+\newenvironment { tab } [2] {
+  \begin{table}[h]
+    \centering
+    \label{#1}
+    \caption{#2}
+}{
+  \end{table}
+}
