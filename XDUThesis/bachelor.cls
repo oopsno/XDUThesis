@@ -8,6 +8,7 @@
 \RequirePackage{XDUThesis/common/section}
 \RequirePackage{XDUThesis/bachelor/suger}
 \RequirePackage{XDUThesis/bachelor/cover}
+\RequirePackage{XDUThesis/bachelor/debug}
 \ProvidesExplClass{XDUThesis/bachelor}{2016/05/22}{0.2.0}{西安电子科技大学本科毕业设计(论文)模板}
 
 %%%%%%%%%%%%%%%%%%%%
@@ -95,10 +96,18 @@
 % 设置参考文献样式为GB/T 7714-2005
 \bibliographystyle { XDUThesis/3rdparty/gbt7714/gbt7714-2005 }
 
-\let \l__original_cite \cite
+\let \__original_cite \cite
 \RenewDocumentCommand \cite { m }
 {
-  $^\textnormal { \l__original_cite { #1 } }$
+  $^\textnormal { \__original_cite { #1 } }$
+}
+
+% 覆盖参考文献命令以将之加入目录
+\let \__original_bibliography \bibliography
+\RenewDocumentCommand \bibliography { m }
+{
+  \__original_bibliography{#1}
+  \addcontentsline{toc}{chapter}{\bibname}
 }
 
 %%%%%%%%%%%%%%%%%%%%
@@ -137,16 +146,5 @@
     \term_new:nnn { #1 } { #2 } { #3 }
   }
 
-% DebugChapter宏在调用位置插入章节 ``调试信息''
-\NewDocumentCommand \DebugChapter { }
-  {
-    \switch_if:nnTF { compile } { debug }
-      {
-        \msg_term:n { 正在以调试模式编译 }
-        \chapter { 调试信息 }
-        \switch_debuginfo:
-        \cover_debuginfo:
-      }
-      {
-      }
-  }
+% 在文末尾展开调试信息
+\AtEndDocument{ \debug_gen_chapter: }

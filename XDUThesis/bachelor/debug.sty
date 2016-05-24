@@ -1,0 +1,23 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% LaTeX3
+\RequirePackage{expl3}
+\RequirePackage{graphicx}
+\ProvidesExplPackage{XDUThesis/bachelor/debug}{2016/05/22}{0.1.0}{XDUThesis/bachelor 调试信息}
+
+\RequirePackage{XDUThesis/bachelor/cover}
+\RequirePackage{XDUThesis/common/switch}
+
+\cs_new:Nn \debug_gen_chapter: {
+  \switch_if:nnTF { compile } { debug }
+    {
+      \msg_term:n { 正在以调试模式编译 }
+      \chapter*{调试信息}
+      \markboth{调试信息}{}
+      \setcounter{section}{0}
+      \switch_gen_debug_chapter:
+      \cover_gen_debug_chapter:
+    }
+    {
+    }
+}

@@ -22,8 +22,8 @@
 % 封面主体条目
 \seq_new:c { g_seq_cover_core_items }
 \seq_set_eq:cc { g_seq_cover_core_items } { g_seq_cover_items }
-\seq_pop_right:cNTF { g_seq_cover_core_items } { \l_tmp } { } { }
-\seq_pop_right:cNTF { g_seq_cover_core_items } { \l_tmp } { } { }
+\seq_pop_right:cNTF { g_seq_cover_core_items } { \_tmp } { } { }
+\seq_pop_right:cNTF { g_seq_cover_core_items } { \_tmp } { } { }
 
 % 配置接口
 \cs_new:Npn \cover_item_set_name:nn #1#2
@@ -51,20 +51,14 @@
   }
 
 % 程控接口
-\cs_new:Npn \l__cover_item_name:n #1
+\cs_new:Npn \__cover_item_name:n #1
 {
-  \group_begin:
-  \prop_get:cnN { g_prop_cover_item_name } { #1 } { \lv }
-  \lv
-  \group_end:
+  \prop_item:cn { g_prop_cover_item_name } { #1 }
 }
 
-\cs_new:Npn \l__cover_item_value:n #1
+\cs_new:Npn \__cover_item_value:n #1
 {
-  \group_begin:
-  \prop_get:cnN { g_prop_cover_item_value } { #1 } { \lv }
-  \lv
-  \group_end:
+  \prop_item:cn { g_prop_cover_item_value } { #1 }
 }
 
 \seq_map_function:cN { g_seq_cover_items } { \cover_item_new:n }
@@ -72,17 +66,17 @@
 % 导出标题
 \cs_new:Npn \thesis_info:n #1
   {
-    \l__cover_item_value:n { #1 }
+    \__cover_item_value:n { #1 }
   }
 
 % 私有函数 创建一个blank
-\cs_new:Npn \l__cover_blank:nn #1#2
+\cs_new:Npn \__cover_blank:nn #1#2
   {
     \underline { \makebox [ #2 ] [ c ] { #1 } }
   }
 
 % 支持自动折行的"题目"
-\cs_new:Npn \l__cover_title_item:
+\cs_new:Npn \__cover_title_item:
   {
     \group_begin:
     \prop_get:cnN { g_prop_cover_item_name  } { title } { \l_name  }
@@ -99,53 +93,53 @@
     }
     {
       \bfseries\heiti\zihao{3}
-      \l__cover_blank:nn { \str_range:Nnn { \l_value } { 1 } { 14 } } { 240pt }
+      \__cover_blank:nn { \str_range:Nnn { \l_value } { 1 } { 14 } } { 240pt }
       \vskip -1em
-      \hspace{5em} \l__cover_blank:nn { \str_range:Nnn { \l_value } { 15 } { 28 } } { 240pt }
+      \hspace{5em} \__cover_blank:nn { \str_range:Nnn { \l_value } { 15 } { 28 } } { 240pt }
     }
     \group_end:
   }
 
-\cs_new:Npn \l__cover_core_item:n #1
+\cs_new:Npn \__cover_core_item:n #1
   {
     \str_if_eq:nnTF { #1 } { title }
       {
-        \l__cover_title_item:
+        \__cover_title_item:
       }
       {
         \vskip -0.5em
-        { \bfseries\songti\zihao{3} \l__cover_item_name:n { #1 } }
-        { \songti\zihao{-3} \hspace{1em} \l__cover_blank:nn  { \l__cover_item_value:n { #1 } } { 240pt } }
+        { \bfseries\songti\zihao{3} \__cover_item_name:n { #1 } }
+        { \songti\zihao{-3} \hspace{1em} \__cover_blank:nn  { \__cover_item_value:n { #1 } } { 240pt } }
       }
   }
 
-\cs_new:Npn \l__cover_corner_item:n #1
+\cs_new:Npn \__cover_corner_item:n #1
   {
     {
-      \bfseries\songti\zihao{-4}\ziju{0.5} \l__cover_item_name:n { #1 }
+      \bfseries\songti\zihao{-4}\ziju{0.5} \__cover_item_name:n { #1 }
       \hspace{1em}
-      \l__cover_blank:nn { \l__cover_item_value:n { #1 } } { 55pt }
+      \__cover_blank:nn { \__cover_item_value:n { #1 } } { 55pt }
     }
   }
 
 % 构造封面
 \cs_new:Nn \cover_make:
   {
-    \clearpage
+    \cleardoublepage
     \newgeometry{left=3cm,right=3cm,top=2.54cm,bottom=2.54cm}
     \thispagestyle{empty}
     \begin{flushright}
-      \l__cover_corner_item:n { class } \\
-      \l__cover_corner_item:n { id    }
+      \__cover_corner_item:n { class } \\
+      \__cover_corner_item:n { id    }
     \end{flushright}
     \begin{center}
       \vskip 0.5cm
         \includegraphics[width=7.5cm]{xdu_logo_text}
       \vskip 0cm
-        \heiti\zihao{0}\ziju{0.125} \l__cover_item_name:n { type } \ziju{0}
+        \heiti\zihao{0}\ziju{0.125} \__cover_item_name:n { type } \ziju{0}
       \vskip 1.5cm
         \includegraphics[width=4cm]{xdu_logo_graph}
-      \seq_map_function:cN { g_seq_cover_core_items } { \l__cover_core_item:n }
+      \seq_map_function:cN { g_seq_cover_core_items } { \__cover_core_item:n }
     \end{center}
     \restoregeometry
   }
@@ -154,15 +148,13 @@
 \include{XDUThesis/bachelor/cover.cfg}
 
 % 调试接口
-\cs_new:Nn \cover_debuginfo:
+\cs_new:Nn \cover_gen_debug_chapter:
   {
-    \group_begin:
     \section { 封面信息 }
     \begin { itemize }
     \seq_map_inline:cn { g_seq_cover_items }
       {
-        \item { \l__cover_item_name:n { ##1 } {\quad} - {\quad} \l__cover_item_value:n { ##1 } }
+        \item { \__cover_item_name:n { ##1 } {\quad} - {\quad} \__cover_item_value:n { ##1 } }
       }
     \end{ itemize }
-    \group_end:
   }
