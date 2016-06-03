@@ -112,7 +112,10 @@
 
 % 修改公式标号样式
 \RequirePackage{amsmath}
-\renewcommand{\theequation}{式 \thechapter-\arabic{equation}}
+\makeatletter
+\def\tagform@#1{\maketag@@@{式 (\ignorespaces#1\unskip\@@italiccorr)}}
+\makeatother
+\renewcommand{\theequation}{\thechapter-\arabic{equation}}
 
 %%%%%%%%%%%%%%%%%%%%
 % 导出文档命令
