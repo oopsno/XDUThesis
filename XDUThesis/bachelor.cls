@@ -110,9 +110,9 @@
   \addcontentsline{toc}{chapter}{\bibname}
 }
 
-% 修改公示标号样式
+% 修改公式标号样式
 \RequirePackage{amsmath}
-\renewcommand{\theequation}{式 \thechapter.\arabic{equation}}
+\renewcommand{\theequation}{式 \thechapter-\arabic{equation}}
 
 %%%%%%%%%%%%%%%%%%%%
 % 导出文档命令
