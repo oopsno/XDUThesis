@@ -5,28 +5,35 @@
 \ProvidesExplPackage{XDUThesis/common/section}{2016/05/22}{0.1.0}{文档部件}
 
 \cs_new:Npn \__c_sec_starch: #1#2 {
-  \cleardoublepage
   \chapter*{#1}
   \label{#2}
   \markboth{#1}{}
 }
 
-\newcommand { \AbstractCN } {
+\newenvironment { AbstractCN } {
+  \clearpage
   \__c_sec_starch: { 摘{\hspace{2em}}要 } { ch:abs:cn }
   \def\l_keyword_prefix{关键词：}
+} {
+  { \pagestyle{empty} \cleardoublepage }
 }
 
-\newcommand { \Acknowledge } {
-  \__c_sec_starch: { 致{\hspace{2em}}谢 } { ch:acknowledge}
-  \addcontentsline{toc}{chapter}{致谢}
+\newenvironment { AbstractEN } {
+  \clearpage
+  \__c_sec_starch: { Abstract } { ch:abs:en }
+  \def\l_keyword_prefix{Keyword:}
+} {
+  \thispagestyle{empty}
+  \cleardoublepage
 }
 
 \newcommand { \Keywords }[6][] {
   {\bf {\l_keyword_prefix}{#1}\ {#2}\ {#3}\ {#4}\ {#5}\ {#6}}
 }
 
-\newcommand { \AbstractEN } {
-  \__c_sec_starch: { Abstract } { ch:abs:en }
-  \def\l_keyword_prefix{Keyword:}
+\newcommand { \Acknowledge } {
+  \cleardoublepage
+  \__c_sec_starch: { 致{\hspace{2em}}谢 } { ch:acknowledge}
+  \addcontentsline{toc}{chapter}{致谢}
 }
 
